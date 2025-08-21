@@ -6,7 +6,7 @@ public class PrintHelper {
                 """;
 
     public static void printHorizontalLine() {
-        System.out.println(line);
+        System.out.print(line);
     }
 
     public static void printSection(String msg) {
@@ -17,6 +17,15 @@ public class PrintHelper {
 
     public static void printListInSection(List<?> ls) {
         printHorizontalLine();
+        for (int i = 0; i < ls.size(); i++) {
+            System.out.println((i + 1) + "." + ls.get(i).toString());
+        }
+        printHorizontalLine();
+    }
+
+    public static void printListInSection(List<?> ls, String msg) {
+        printHorizontalLine();
+        System.out.println(msg);
         for (int i = 0; i < ls.size(); i++) {
             System.out.println((i + 1) + "." + ls.get(i).toString());
         }
