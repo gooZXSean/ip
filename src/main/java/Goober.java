@@ -12,6 +12,7 @@ public class Goober {
     public static void main(String[] args) {
         startUp();
         greet();
+        userLoop();
         exit();
     }
 
@@ -20,12 +21,21 @@ public class Goober {
     }
 
     private static void greet() {
-        String msg = "Hello, I'm Goober!, how may I help you today?";
-        printHelper.horizontalPrintln(msg);
+        String msg = "Hello, I'm Goober! How may I help you today?";
+        PrintHelper.horizontalPrintln(msg);
+    }
+
+    private static void userLoop() {
+        java.util.Scanner sc = new java.util.Scanner(System.in);
+        while (true) {
+            String line = sc.nextLine();
+            if (line.trim().equalsIgnoreCase("bye")) break;
+            PrintHelper.horizontalPrintln(line);
+        }
     }
 
     private static void exit() {
         String msg = "Bye! Hope to see you again soon!";
-        printHelper.horizontalPrintln(msg);
+        PrintHelper.horizontalPrintln(msg);
     }
 }

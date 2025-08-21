@@ -1,4 +1,4 @@
-public class printHelper {
+public class PrintHelper {
     public static void horizontalPrintln(String msg) {
         String line = """
                 ____________________________________________________________
