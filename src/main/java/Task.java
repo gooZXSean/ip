@@ -1,9 +1,9 @@
 public class Task {
-    private String name = "no name";
+    private String description = "no name";
     private boolean completionStatus = false;
 
-    public Task(String name) {
-        this.name = name;
+    public Task(String description) {
+        this.description = description;
     }
 
     public void markComplete() {
@@ -18,6 +18,6 @@ public class Task {
     public String toString() {
         char c = ' ';
         if (completionStatus) c = 'X';
-        return "[" + c + "] " + name;
+        return "[" + c + "] " + description;
     }
 }
