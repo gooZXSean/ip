@@ -1,6 +1,6 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+// TODO: Add more error handling, refactor flag handling, utilise enums (maybe in task priorities)
 
 public class Goober {
     private static final String logo = """
@@ -147,7 +147,7 @@ public class Goober {
     private static void markCompleteTask(int index) {
         Task task = taskList.get(index - 1);
         task.markComplete();
-        String msg = "Nice! I've marked this task as done:\n  " + task.toString();
+        String msg = "Nice! I've marked this task as done:\n  " + task;
         PrintHelper.printSection(msg);
     }
 
@@ -159,7 +159,7 @@ public class Goober {
     private static void unmarkCompleteTask(int index) {
         Task task = taskList.get(index - 1);
         task.unmarkComplete();
-        String msg = "OK, I've marked this task as not done yet:\n  " + task.toString();
+        String msg = "OK, I've marked this task as not done yet:\n  " + task;
         PrintHelper.printSection(msg);
     }
 
