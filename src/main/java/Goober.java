@@ -68,6 +68,9 @@ public class Goober {
                     case "event":
                         addEvent(line);
                         break;
+                    case "delete":
+                        deleteTask(line);
+                        break;
                     default:
                         throw new IllegalArgumentException("Sorry, I don't recognise that command! :(");
                 }
@@ -117,6 +120,20 @@ public class Goober {
     private static void addTask(Task task) {
         taskList.add(task);
         String msg = "Got it. I've added this task:\n" +
+                task.toString() +
+                "\nNow you have " + taskList.size() + " tasks in the list.";
+        PrintHelper.printSection(msg);
+    }
+
+    private static void deleteTask(String line) {
+        String[] args = line.split(" ");
+        deleteTask(Integer.parseInt(args[1]));
+    }
+
+    private static void deleteTask(int index) {
+        Task task = taskList.get(index - 1);
+        taskList.remove(task);
+        String msg = "Noted. I've removed this task:\n" +
                 task.toString() +
                 "\nNow you have " + taskList.size() + " tasks in the list.";
         PrintHelper.printSection(msg);
