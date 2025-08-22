@@ -42,50 +42,57 @@ public class Goober {
         boolean ongoing = true;
         while (ongoing) {
             String line = sc.nextLine().trim();
-            String[] args = line.split(" ");
-            switch(args[0]) {
-                case "":
-                    break;
-                case "bye":
-                    ongoing = false;
-                    break;
-                case "list":
-                    printTasks();
-                    break;
-                case "mark":
-                    markCompleteTask(args);
-                    break;
-                case "unmark":
-                    unmarkCompleteTask(args);
-                    break;
-                case "todo":
-                    addTodo(line);
-                    break;
-                case "deadline":
-                    addDeadline(line);
-                    break;
-                case "event":
-                    addEvent(line);
-                    break;
-                default:
-                    break;
+            String cmd = line.split(" ", 2)[0].toLowerCase();
+            try {
+                switch(cmd) {
+                    case "":
+                        break;
+                    case "bye":
+                        ongoing = false;
+                        break;
+                    case "list":
+                        printTasks();
+                        break;
+                    case "mark":
+                        markCompleteTask(line);
+                        break;
+                    case "unmark":
+                        unmarkCompleteTask(line);
+                        break;
+                    case "todo":
+                        addTodo(line);
+                        break;
+                    case "deadline":
+                        addDeadline(line);
+                        break;
+                    case "event":
+                        addEvent(line);
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Sorry, I don't recognise that command! :(");
+                }
+            } catch (IllegalArgumentException e){
+                 PrintHelper.printSection((e.toString()));
             }
         }
     }
 
     private static void printTasks() {
-        PrintHelper.printListInSection(taskList, "Here are the tasks in your list:");
+        if (taskList.isEmpty()) {
+            PrintHelper.printSection("You've got no tasks!");
+        } else {
+            PrintHelper.printListInSection(taskList, "Here are the tasks in your list:");
+        }
     }
 
     private static void addTodo(String line) {
-        String description = line.split(" ", 2)[1];
+        String[] args = line.split(" ", 2);
+        if (args.length != 2) {
+            throw new IllegalArgumentException("The description of a todo cannot be empty!");
+        }
+        String description = args[1];
         Task task = new Todo(description);
-
-        taskList.add(task);
-        String msg = "Got it. I've added this task:\n" +
-                task.toString() +
-                "\nNow you have " + taskList.size() + " tasks in the list.";
-        PrintHelper.printSection(msg);
+        addTask(task);
     }
 
     private static void addDeadline(String line) {
@@ -93,23 +100,21 @@ public class Goober {
         int byIndex = line.indexOf(byFlag);
         String by = line.substring(byIndex + byFlag.length()).trim();
         Task task = new Deadline(line.substring("deadline ".length(), byIndex).trim() , by);
-
-        taskList.add(task);
-        String msg = "Got it. I've added this task:\n" +
-                task.toString() +
-                "\nNow you have " + taskList.size() + " tasks in the list.";
-        PrintHelper.printSection(msg);
+        addTask(task);
     }
 
     private static void addEvent(String line) {
         String fromFlag = "/from";
         String toFlag = "/to";
-        int fromIndex = line.indexOf("/from");
-        int toIndex = line.indexOf("/to");
+        int fromIndex = line.indexOf(fromFlag);
+        int toIndex = line.indexOf(toFlag);
         String from = line.substring(fromIndex + fromFlag.length(), toIndex).trim();
         String to = line.substring(toIndex + toFlag.length()).trim();
         Task task = new Event(line.substring("event ".length(), fromIndex).trim(), from, to);
+        addTask(task);
+    }
 
+    private static void addTask(Task task) {
         taskList.add(task);
         String msg = "Got it. I've added this task:\n" +
                 task.toString() +
@@ -117,8 +122,8 @@ public class Goober {
         PrintHelper.printSection(msg);
     }
 
-
-    private static void markCompleteTask(String[] args) {
+    private static void markCompleteTask(String line) {
+        String[] args = line.split(" ");
         markCompleteTask(Integer.parseInt(args[1]));
     }
     
@@ -129,7 +134,8 @@ public class Goober {
         PrintHelper.printSection(msg);
     }
 
-    private static void unmarkCompleteTask(String[] args) {
+    private static void unmarkCompleteTask(String line) {
+        String[] args = line.split(" ");
         unmarkCompleteTask(Integer.parseInt(args[1]));
     }
 
