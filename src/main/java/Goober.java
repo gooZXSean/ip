@@ -1,25 +1,9 @@
-import java.util.ArrayList;
 import java.util.List;
-// TODO: Add more error handling, refactor flag handling, utilise enums (maybe in task priorities)
 
 public class Goober {
-    private static final String logo = """
-            ─────────────────────────────────────────────────────────────────────────────────────────────────
-            ─██████████████─██████████████─██████████████─██████████████───██████████████─████████████████───
-            ─██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░██───██░░░░░░░░░░██─██░░░░░░░░░░░░██───
-            ─██░░██████████─██░░██████░░██─██░░██████░░██─██░░██████░░██───██░░██████████─██░░████████░░██───
-            ─██░░██─────────██░░██──██░░██─██░░██──██░░██─██░░██──██░░██───██░░██─────────██░░██────██░░██───
-            ─██░░██─────────██░░██──██░░██─██░░██──██░░██─██░░██████░░████─██░░██████████─██░░████████░░██───
-            ─██░░██──██████─██░░██──██░░██─██░░██──██░░██─██░░░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░░░██───
-            ─██░░██──██░░██─██░░██──██░░██─██░░██──██░░██─██░░████████░░██─██░░██████████─██░░██████░░████───
-            ─██░░██──██░░██─██░░██──██░░██─██░░██──██░░██─██░░██────██░░██─██░░██─────────██░░██──██░░██─────
-            ─██░░██████░░██─██░░██████░░██─██░░██████░░██─██░░████████░░██─██░░██████████─██░░██──██░░██████─
-            ─██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░░░██─██░░░░░░░░░░██─██░░██──██░░░░░░██─
-            ─██████████████─██████████████─██████████████─████████████████─██████████████─██████──██████████─
-            ─────────────────────────────────────────────────────────────────────────────────────────────────
-            """;
-
-    public static List<Task> taskList = new ArrayList<>();
+    private static SaveData saveData;
+    private static List<Task> taskList;
+    private static final String saveFileName = "GooberTasks.txt";
 
     public static void main(String[] args) {
         startUp();
@@ -29,10 +13,12 @@ public class Goober {
     }
 
     private static void startUp() {
-        System.out.println(logo);
+        saveData = FileHelper.getOrCreateSave(saveFileName);
+        taskList = saveData.getTaskList();
     }
 
     private static void greet() {
+        System.out.println(PrintHelper.logo);
         String msg = "Hello, I'm Goober! How may I help you today?";
         PrintHelper.printSection(msg);
     }
@@ -122,6 +108,7 @@ public class Goober {
         String msg = "Got it. I've added this task:\n" +
                 task.toString() +
                 "\nNow you have " + taskList.size() + " tasks in the list.";
+        updateSaveData();
         PrintHelper.printSection(msg);
     }
 
@@ -136,7 +123,9 @@ public class Goober {
         String msg = "Noted. I've removed this task:\n" +
                 task.toString() +
                 "\nNow you have " + taskList.size() + " tasks in the list.";
+        updateSaveData();
         PrintHelper.printSection(msg);
+
     }
 
     private static void markCompleteTask(String line) {
@@ -148,6 +137,7 @@ public class Goober {
         Task task = taskList.get(index - 1);
         task.markComplete();
         String msg = "Nice! I've marked this task as done:\n  " + task;
+        updateSaveData();
         PrintHelper.printSection(msg);
     }
 
@@ -160,7 +150,12 @@ public class Goober {
         Task task = taskList.get(index - 1);
         task.unmarkComplete();
         String msg = "OK, I've marked this task as not done yet:\n  " + task;
+        updateSaveData();
         PrintHelper.printSection(msg);
+    }
+
+    private static void updateSaveData() {
+        FileHelper.saveToFile(saveData, saveFileName);
     }
 
     private static void exit() {
