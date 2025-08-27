@@ -4,20 +4,20 @@ import java.util.List;
 
 public class Goober {
     private static final String logo = """
-─────────────────────────────────────────────────────────────────────────────────────────────────
-─██████████████─██████████████─██████████████─██████████████───██████████████─████████████████───
-─██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░██───██░░░░░░░░░░██─██░░░░░░░░░░░░██───
-─██░░██████████─██░░██████░░██─██░░██████░░██─██░░██████░░██───██░░██████████─██░░████████░░██───
-─██░░██─────────██░░██──██░░██─██░░██──██░░██─██░░██──██░░██───██░░██─────────██░░██────██░░██───
-─██░░██─────────██░░██──██░░██─██░░██──██░░██─██░░██████░░████─██░░██████████─██░░████████░░██───
-─██░░██──██████─██░░██──██░░██─██░░██──██░░██─██░░░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░░░██───
-─██░░██──██░░██─██░░██──██░░██─██░░██──██░░██─██░░████████░░██─██░░██████████─██░░██████░░████───
-─██░░██──██░░██─██░░██──██░░██─██░░██──██░░██─██░░██────██░░██─██░░██─────────██░░██──██░░██─────
-─██░░██████░░██─██░░██████░░██─██░░██████░░██─██░░████████░░██─██░░██████████─██░░██──██░░██████─
-─██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░░░██─██░░░░░░░░░░██─██░░██──██░░░░░░██─
-─██████████████─██████████████─██████████████─████████████████─██████████████─██████──██████████─
-─────────────────────────────────────────────────────────────────────────────────────────────────
-""";
+            ─────────────────────────────────────────────────────────────────────────────────────────────────
+            ─██████████████─██████████████─██████████████─██████████████───██████████████─████████████████───
+            ─██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░██───██░░░░░░░░░░██─██░░░░░░░░░░░░██───
+            ─██░░██████████─██░░██████░░██─██░░██████░░██─██░░██████░░██───██░░██████████─██░░████████░░██───
+            ─██░░██─────────██░░██──██░░██─██░░██──██░░██─██░░██──██░░██───██░░██─────────██░░██────██░░██───
+            ─██░░██─────────██░░██──██░░██─██░░██──██░░██─██░░██████░░████─██░░██████████─██░░████████░░██───
+            ─██░░██──██████─██░░██──██░░██─██░░██──██░░██─██░░░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░░░██───
+            ─██░░██──██░░██─██░░██──██░░██─██░░██──██░░██─██░░████████░░██─██░░██████████─██░░██████░░████───
+            ─██░░██──██░░██─██░░██──██░░██─██░░██──██░░██─██░░██────██░░██─██░░██─────────██░░██──██░░██─────
+            ─██░░██████░░██─██░░██████░░██─██░░██████░░██─██░░████████░░██─██░░██████████─██░░██──██░░██████─
+            ─██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░░░██─██░░░░░░░░░░██─██░░██──██░░░░░░██─
+            ─██████████████─██████████████─██████████████─████████████████─██████████████─██████──██████████─
+            ─────────────────────────────────────────────────────────────────────────────────────────────────
+            """;
 
     public static List<Task> taskList = new ArrayList<>();
 
@@ -44,38 +44,38 @@ public class Goober {
             String line = sc.nextLine().trim();
             String cmd = line.split(" ", 2)[0].toLowerCase();
             try {
-                switch(cmd) {
-                    case "":
-                        break;
-                    case "bye":
-                        ongoing = false;
-                        break;
-                    case "list":
-                        printTasks();
-                        break;
-                    case "mark":
-                        markCompleteTask(line);
-                        break;
-                    case "unmark":
-                        unmarkCompleteTask(line);
-                        break;
-                    case "todo":
-                        addTodo(line);
-                        break;
-                    case "deadline":
-                        addDeadline(line);
-                        break;
-                    case "event":
-                        addEvent(line);
-                        break;
-                    case "delete":
-                        deleteTask(line);
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Sorry, I don't recognise that command! :(");
+                switch (cmd) {
+                case "":
+                    break;
+                case "bye":
+                    ongoing = false;
+                    break;
+                case "list":
+                    printTasks();
+                    break;
+                case "mark":
+                    markCompleteTask(line);
+                    break;
+                case "unmark":
+                    unmarkCompleteTask(line);
+                    break;
+                case "todo":
+                    addTodo(line);
+                    break;
+                case "deadline":
+                    addDeadline(line);
+                    break;
+                case "event":
+                    addEvent(line);
+                    break;
+                case "delete":
+                    deleteTask(line);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Sorry, I don't recognise that command! :(");
                 }
-            } catch (IllegalArgumentException e){
-                 PrintHelper.printSection((e.toString()));
+            } catch (IllegalArgumentException e) {
+                PrintHelper.printSection((e.toString()));
             }
         }
     }
@@ -102,7 +102,7 @@ public class Goober {
         String byFlag = "/by";
         int byIndex = line.indexOf(byFlag);
         String by = line.substring(byIndex + byFlag.length()).trim();
-        Task task = new Deadline(line.substring("deadline ".length(), byIndex).trim() , by);
+        Task task = new Deadline(line.substring("deadline ".length(), byIndex).trim(), by);
         addTask(task);
     }
 
@@ -143,7 +143,7 @@ public class Goober {
         String[] args = line.split(" ");
         markCompleteTask(Integer.parseInt(args[1]));
     }
-    
+
     private static void markCompleteTask(int index) {
         Task task = taskList.get(index - 1);
         task.markComplete();
