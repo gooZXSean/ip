@@ -41,10 +41,14 @@ public class Ui {
 
     public static void printListInSection(List<?> ls, String msg) {
         printHorizontalLine();
+        printList(ls, msg);
+        printHorizontalLine();
+    }
+
+    public static void printList(List<?> ls, String msg) {
         System.out.println(msg);
         for (int i = 0; i < ls.size(); i++) {
             System.out.println((i + 1) + "." + ls.get(i).toString());
         }
-        printHorizontalLine();
     }
 }

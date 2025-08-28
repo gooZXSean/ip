@@ -1,3 +1,5 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Objects;
 
@@ -94,8 +96,15 @@ public class Goober {
         if (by.isEmpty()) {
             throw new IllegalArgumentException("The " + byFlag + " of a deadline cannot be empty!");
         }
-        Task task = new Deadline(description, by);
-        addTask(task);
+
+        try {
+            LocalDateTime byDate = Parser.parseDateTime(by);
+            Task task = new Deadline(description, byDate);
+            addTask(task);
+        } catch (DateTimeParseException e) {
+            String msg = "Wrong date time format!: " + e + "\nAccepted date formats: ";
+            Ui.printListInSection(Parser.formatList, msg);
+        }
     }
 
     private static void addEvent(String line) {
@@ -114,8 +123,15 @@ public class Goober {
         if (to.isEmpty()) {
             throw new IllegalArgumentException("The " + toFlag + " of a event cannot be empty!");
         }
-        Task task = new Event(description, from, to);
-        addTask(task);
+        try {
+            LocalDateTime fromDate = Parser.parseDateTime(from);
+            LocalDateTime toDate = Parser.parseDateTime(to);
+            Task task = new Event(description, fromDate, toDate);
+            addTask(task);
+        } catch (DateTimeParseException e) {
+            String msg = "Wrong date time format!: " + e + "/nAccepted date formats: ";
+            Ui.printListInSection(Parser.formatList, msg);
+        }
     }
 
     private static void addTask(Task task) {
