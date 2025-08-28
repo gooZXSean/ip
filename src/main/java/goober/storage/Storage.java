@@ -1,4 +1,4 @@
-package goober;
+package goober.storage;
 
 import java.io.File;
 import java.io.FileInputStream;

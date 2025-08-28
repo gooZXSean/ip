@@ -1,4 +1,4 @@
-package goober;
+package goober.storage;
 
 import goober.task.Task;
 
