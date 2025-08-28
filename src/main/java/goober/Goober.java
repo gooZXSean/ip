@@ -10,7 +10,7 @@ import java.time.format.DateTimeParseException;
 
 public class Goober {
     private static SaveData saveData;
-    private static final String saveFileName = "GooberTasks.txt";
+    private static final String saveFileName = "GooberTasks.ser";
 
     public static void main(String[] args) {
         startUp();
