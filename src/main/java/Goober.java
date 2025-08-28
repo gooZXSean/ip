@@ -1,8 +1,10 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Objects;
 
 public class Goober {
     private static SaveData saveData;
-    private static List<Task> taskList;
     private static final String saveFileName = "GooberTasks.txt";
 
     public static void main(String[] args) {
@@ -13,14 +15,13 @@ public class Goober {
     }
 
     private static void startUp() {
-        saveData = FileHelper.getOrCreateSave(saveFileName);
-        taskList = saveData.getTaskList();
+        saveData = Storage.getOrCreateSave(saveFileName);
     }
 
     private static void greet() {
-        System.out.println(PrintHelper.logo);
+        System.out.println(Ui.logo);
         String msg = "Hello, I'm Goober! How may I help you today?";
-        PrintHelper.printSection(msg);
+        Ui.printSection(msg);
     }
 
     private static void userLoop() {
@@ -61,105 +62,161 @@ public class Goober {
                     throw new IllegalArgumentException("Sorry, I don't recognise that command! :(");
                 }
             } catch (IllegalArgumentException e) {
-                PrintHelper.printSection((e.toString()));
+                Ui.printSection((e.toString()));
             }
         }
     }
 
     private static void printTasks() {
-        if (taskList.isEmpty()) {
-            PrintHelper.printSection("You've got no tasks!");
+        if (saveData.getTaskList().isEmpty()) {
+            Ui.printSection("You've got no tasks!");
         } else {
-            PrintHelper.printListInSection(taskList, "Here are the tasks in your list:");
+            Ui.printListInSection(saveData.getTaskList(), "Here are the tasks in your list:");
         }
     }
 
     private static void addTodo(String line) {
-        String[] args = line.split(" ", 2);
-        if (args.length != 2) {
+        String flag = "todo";
+        String description = Parser.getFlagArg(line, flag);
+        if (description.isEmpty()) {
             throw new IllegalArgumentException("The description of a todo cannot be empty!");
         }
-        String description = args[1];
         Task task = new Todo(description);
         addTask(task);
     }
 
     private static void addDeadline(String line) {
+        String flag = "deadline";
         String byFlag = "/by";
-        int byIndex = line.indexOf(byFlag);
-        String by = line.substring(byIndex + byFlag.length()).trim();
-        Task task = new Deadline(line.substring("deadline ".length(), byIndex).trim(), by);
-        addTask(task);
+        String description = Parser.getFlagArg(line, flag);
+        String by = Parser.getFlagArg(line, byFlag);
+        if (description.isEmpty()) {
+            throw new IllegalArgumentException("The description of a deadline cannot be empty!");
+        }
+        if (by.isEmpty()) {
+            throw new IllegalArgumentException("The " + byFlag + " of a deadline cannot be empty!");
+        }
+
+        try {
+            LocalDateTime byDate = Parser.parseDateTime(by);
+            Task task = new Deadline(description, byDate);
+            addTask(task);
+        } catch (DateTimeParseException e) {
+            String msg = "Wrong date time format!: " + e + "\nAccepted date formats: ";
+            Ui.printListInSection(Parser.formatList, msg);
+        }
     }
 
     private static void addEvent(String line) {
+        String flag = "event";
         String fromFlag = "/from";
         String toFlag = "/to";
-        int fromIndex = line.indexOf(fromFlag);
-        int toIndex = line.indexOf(toFlag);
-        String from = line.substring(fromIndex + fromFlag.length(), toIndex).trim();
-        String to = line.substring(toIndex + toFlag.length()).trim();
-        Task task = new Event(line.substring("event ".length(), fromIndex).trim(), from, to);
-        addTask(task);
+        String description = Parser.getFlagArg(line, flag);
+        String from = Parser.getFlagArg(line, fromFlag);
+        String to = Parser.getFlagArg(line, toFlag);
+        if (description.isEmpty()) {
+            throw new IllegalArgumentException("The description of an event cannot be empty!");
+        }
+        if (from.isEmpty()) {
+            throw new IllegalArgumentException("The " + fromFlag + " of a event cannot be empty!");
+        }
+        if (to.isEmpty()) {
+            throw new IllegalArgumentException("The " + toFlag + " of a event cannot be empty!");
+        }
+        try {
+            LocalDateTime fromDate = Parser.parseDateTime(from);
+            LocalDateTime toDate = Parser.parseDateTime(to);
+            Task task = new Event(description, fromDate, toDate);
+            addTask(task);
+        } catch (DateTimeParseException e) {
+            String msg = "Wrong date time format!: " + e + "/nAccepted date formats: ";
+            Ui.printListInSection(Parser.formatList, msg);
+        }
     }
 
     private static void addTask(Task task) {
-        taskList.add(task);
+        saveData.getTaskList().add(task);
         String msg = "Got it. I've added this task:\n" +
                 task.toString() +
-                "\nNow you have " + taskList.size() + " tasks in the list.";
+                "\nNow you have " + saveData.getTaskList().size() + " tasks in the list.";
         updateSaveData();
-        PrintHelper.printSection(msg);
+        Ui.printSection(msg);
     }
 
     private static void deleteTask(String line) {
-        String[] args = line.split(" ");
-        deleteTask(Integer.parseInt(args[1]));
+        String flag = "delete";
+        String index = Parser.getFlagArg(line, flag);
+        if (index.isEmpty()) {
+            throw new IllegalArgumentException("The task number of a delete cannot be empty!");
+        }
+        deleteTask(Integer.parseInt(index));
     }
 
     private static void deleteTask(int index) {
-        Task task = taskList.get(index - 1);
-        taskList.remove(task);
-        String msg = "Noted. I've removed this task:\n" +
-                task.toString() +
-                "\nNow you have " + taskList.size() + " tasks in the list.";
-        updateSaveData();
-        PrintHelper.printSection(msg);
-
+        try {
+            Task task = saveData.getTaskList().get(index - 1);
+            saveData.getTaskList().remove(task);
+            String msg = "Noted. I've removed this task:\n" +
+                    task.toString() +
+                    "\nNow you have " + saveData.getTaskList().size() + " tasks in the list.";
+            updateSaveData();
+            Ui.printSection(msg);
+        } catch (IndexOutOfBoundsException e) {
+            String msg = "Error! Index of task out of bounds!";
+            Ui.printSection(msg);
+        }
     }
 
     private static void markCompleteTask(String line) {
-        String[] args = line.split(" ");
-        markCompleteTask(Integer.parseInt(args[1]));
+        String flag = "mark";
+        String index = Parser.getFlagArg(line, flag);
+        if (index.isEmpty()) {
+            throw new IllegalArgumentException("The task number of a mark cannot be empty!");
+        }
+        markCompleteTask(Integer.parseInt(index));
     }
 
     private static void markCompleteTask(int index) {
-        Task task = taskList.get(index - 1);
-        task.markComplete();
-        String msg = "Nice! I've marked this task as done:\n  " + task;
-        updateSaveData();
-        PrintHelper.printSection(msg);
+        try {
+            Task task = saveData.getTaskList().get(index - 1);
+            task.markComplete();
+            String msg = "Nice! I've marked this task as done:\n  " + task;
+            updateSaveData();
+            Ui.printSection(msg);
+        } catch (IndexOutOfBoundsException e) {
+            String msg = "Error! Index of task out of bounds!";
+            Ui.printSection(msg);
+        }
     }
 
     private static void unmarkCompleteTask(String line) {
-        String[] args = line.split(" ");
-        unmarkCompleteTask(Integer.parseInt(args[1]));
+        String flag = "unmark";
+        String index = Parser.getFlagArg(line, flag);
+        if (index.isEmpty()) {
+            throw new IllegalArgumentException("The task number of a unmark cannot be empty!");
+        }
+        unmarkCompleteTask(Integer.parseInt(index));
     }
 
     private static void unmarkCompleteTask(int index) {
-        Task task = taskList.get(index - 1);
-        task.unmarkComplete();
-        String msg = "OK, I've marked this task as not done yet:\n  " + task;
-        updateSaveData();
-        PrintHelper.printSection(msg);
+        try {
+            Task task = saveData.getTaskList().get(index - 1);
+            task.unmarkComplete();
+            String msg = "OK, I've marked this task as not done yet:\n  " + task;
+            updateSaveData();
+            Ui.printSection(msg);
+        } catch (IndexOutOfBoundsException e) {
+            String msg = "Error! Index of task out of bounds!";
+            Ui.printSection(msg);
+        }
     }
 
     private static void updateSaveData() {
-        FileHelper.saveToFile(saveData, saveFileName);
+        Storage.saveToFile(saveData, saveFileName);
     }
 
     private static void exit() {
         String msg = "Bye! Hope to see you again soon!";
-        PrintHelper.printSection(msg);
+        Ui.printSection(msg);
     }
 }

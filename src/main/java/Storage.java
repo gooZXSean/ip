@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-public class FileHelper {
+public class Storage {
     public static SaveData getOrCreateSave(String filename) {
         File file = new File(filename);
 
@@ -17,11 +17,11 @@ public class FileHelper {
                 if (obj instanceof SaveData) {
                     return (SaveData) obj;
                 } else {
-                    System.out.println("Warning: SaveData in file is of the wrong type. Creating a new one.");
+                    System.out.println("Warning: TaskList in file is of the wrong type. Creating a new one.");
                 }
 
             } catch (IOException | ClassNotFoundException e) {
-                System.out.println("Error reading SaveData from file, creating new: " + e.getMessage());
+                System.out.println("Error reading TaskList from file, creating new: " + e.getMessage());
             }
         }
 
@@ -30,7 +30,7 @@ public class FileHelper {
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(newSave);
         } catch (IOException e) {
-            System.out.println("Error writing new SaveData to file: " + e.getMessage());
+            System.out.println("Error writing new TaskList to file: " + e.getMessage());
         }
         return newSave;
     }
@@ -40,7 +40,7 @@ public class FileHelper {
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(saveData);
         } catch (IOException e) {
-            System.out.println("Error saving SaevData to file: " + filename);
+            System.out.println("Error saving TaskList to file: " + filename);
         }
     }
 }
