@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class PrintHelper {
+public class Ui {
     private static String line = """
                 ____________________________________________________________
                 """;
