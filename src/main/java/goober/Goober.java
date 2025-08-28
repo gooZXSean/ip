@@ -1,7 +1,12 @@
+package goober;
+
+import goober.task.Deadline;
+import goober.task.Event;
+import goober.task.Task;
+import goober.task.Todo;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
-import java.util.List;
-import java.util.Objects;
 
 public class Goober {
     private static SaveData saveData;

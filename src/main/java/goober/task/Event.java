@@ -1,3 +1,7 @@
+package goober.task;
+
+import goober.Parser;
+
 import java.time.LocalDateTime;
 
 public class Event extends Task {
