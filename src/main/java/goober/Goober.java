@@ -9,6 +9,7 @@ import goober.task.Todo;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 
 public class Goober {
     private static SaveData saveData;
@@ -64,6 +65,9 @@ public class Goober {
                     break;
                 case "delete":
                     deleteTask(line);
+                    break;
+                case "find":
+                    find(line);
                     break;
                 default:
                     throw new IllegalArgumentException("Sorry, I don't recognise that command! :(");
@@ -220,6 +224,21 @@ public class Goober {
 
     private static void updateSaveData() {
         Storage.saveToFile(saveData, saveFileName);
+    }
+
+    /**
+     * Finds tasks whose description contains the given keyword (case-insensitive)
+     * and prints them in a numbered list. If none match, prints an empty-state message.
+     *
+     * @param line user input containing the keyword (e.g., "find book")
+     */
+    private static void find(String line) {
+        String flag = "find";
+        String query = Parser.getFlagArg(line, flag);
+        List<Task> searchResult = saveData.searchTask(query);
+
+        String msg = "Here are the matching tasks in your list:\n";
+        Ui.printListInSection(searchResult, msg);
     }
 
     private static void exit() {
