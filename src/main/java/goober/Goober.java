@@ -26,7 +26,7 @@ public class Goober {
     }
 
     private static void greet() {
-        System.out.println(Ui.logo);
+        System.out.println(Ui.LOGO);
         String msg = "Hello, I'm Goober! How may I help you today?";
         Ui.printSection(msg);
     }
@@ -110,7 +110,7 @@ public class Goober {
             addTask(task);
         } catch (DateTimeParseException e) {
             String msg = "Wrong date time format!: " + e + "\nAccepted date formats: ";
-            Ui.printListInSection(Parser.formatList, msg);
+            Ui.printListInSection(Parser.FORMAT_LIST, msg);
         }
     }
 
@@ -137,7 +137,7 @@ public class Goober {
             addTask(task);
         } catch (DateTimeParseException e) {
             String msg = "Wrong date time format!: " + e + "/nAccepted date formats: ";
-            Ui.printListInSection(Parser.formatList, msg);
+            Ui.printListInSection(Parser.FORMAT_LIST, msg);
         }
     }
 

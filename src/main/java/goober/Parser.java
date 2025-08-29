@@ -6,10 +6,10 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
 
 public class Parser {
-    public static final List<String> formatList = List.of("yyyy-MM-dd HHmm", "HHmm yyyy-MM-dd");
-    private static final DateTimeFormatter dTFormatter = dTFormatterFromList(formatList);
+    public static final List<String> FORMAT_LIST = List.of("yyyy-MM-dd HHmm", "HHmm yyyy-MM-dd");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = buildDateTimeFormatterFromPatterns(FORMAT_LIST);
 
-    public static DateTimeFormatter dTFormatterFromList(List<String> list) {
+    public static DateTimeFormatter buildDateTimeFormatterFromPatterns(List<String> list) {
         DateTimeFormatterBuilder dTFBuilder = new DateTimeFormatterBuilder();
         list.forEach(str -> dTFBuilder.appendOptional(DateTimeFormatter.ofPattern(str)));
         return dTFBuilder.toFormatter();
@@ -24,10 +24,10 @@ public class Parser {
     }
 
     public static LocalDateTime parseDateTime(String str) {
-        return LocalDateTime.parse(str, dTFormatter);
+        return LocalDateTime.parse(str, DATE_TIME_FORMATTER);
     }
 
     public static String dateTimeToString(LocalDateTime dTF) {
-        return dTF.format(DateTimeFormatter.ofPattern("MMM dd yyyy, HHmm")) +"H";
+        return dTF.format(DateTimeFormatter.ofPattern("MMM dd yyyy, HHmm")) + "H";
     }
 }

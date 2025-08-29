@@ -3,11 +3,11 @@ package goober;
 import java.util.List;
 
 public class Ui {
-    private static String line = """
-                ____________________________________________________________
-                """;
+    private static final String LINE = """
+            ____________________________________________________________
+            """;
 
-    public static final String logo = """
+    public static final String LOGO = """
             ─────────────────────────────────────────────────────────────────────────────────────────────────
             ─██████████████─██████████████─██████████████─██████████████───██████████████─████████████████───
             ─██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░██───██░░░░░░░░░░██─██░░░░░░░░░░░░██───
@@ -24,7 +24,7 @@ public class Ui {
             """;
 
     public static void printHorizontalLine() {
-        System.out.print(line);
+        System.out.print(LINE);
     }
 
     public static void printSection(String msg) {
