@@ -12,8 +12,8 @@ public class Parser {
     /**
      * Supported datetime format patterns for parsing input.
      */
-    public static final List<String> formatList = List.of("yyyy-MM-dd HHmm", "HHmm yyyy-MM-dd");
-    private static final DateTimeFormatter dTFormatter = dTFormatterFromList(formatList);
+    public static final List<String> FORMAT_LIST = List.of("yyyy-MM-dd HHmm", "HHmm yyyy-MM-dd");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = buildDateTimeFormatterFromPatterns(FORMAT_LIST);
 
     /**
      * Builds a DateTimeFormatter that can parse any of the given patterns.
@@ -21,7 +21,7 @@ public class Parser {
      * @param list list of datetime patterns
      * @return a DateTimeFormatter supporting all patterns in the list
      */
-    public static DateTimeFormatter dTFormatterFromList(List<String> list) {
+    public static DateTimeFormatter buildDateTimeFormatterFromPatterns(List<String> list) {
         DateTimeFormatterBuilder dTFBuilder = new DateTimeFormatterBuilder();
         list.forEach(str -> dTFBuilder.appendOptional(DateTimeFormatter.ofPattern(str)));
         return dTFBuilder.toFormatter();
@@ -49,7 +49,7 @@ public class Parser {
      * @return the parsed LocalDateTime
      */
     public static LocalDateTime parseDateTime(String str) {
-        return LocalDateTime.parse(str, dTFormatter);
+        return LocalDateTime.parse(str, DATE_TIME_FORMATTER);
     }
 
     /**
@@ -59,6 +59,6 @@ public class Parser {
      * @return formatted string
      */
     public static String dateTimeToString(LocalDateTime dTF) {
-        return dTF.format(DateTimeFormatter.ofPattern("MMM dd yyyy, HHmm")) +"H";
+        return dTF.format(DateTimeFormatter.ofPattern("MMM dd yyyy, HHmm")) + "H";
     }
 }

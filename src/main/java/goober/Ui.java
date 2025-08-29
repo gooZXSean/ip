@@ -6,14 +6,14 @@ import java.util.List;
  * Console UI helpers for printing sections, lists, and separators.
  */
 public class Ui {
-    private static String line = """
-                ____________________________________________________________
-                """;
+    private static final String LINE = """
+            ____________________________________________________________
+            """;
 
     /**
      * ASCII logo shown in the greeting banner.
      */
-    public static final String logo = """
+    public static final String LOGO = """
             ─────────────────────────────────────────────────────────────────────────────────────────────────
             ─██████████████─██████████████─██████████████─██████████████───██████████████─████████████████───
             ─██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░██───██░░░░░░░░░░██─██░░░░░░░░░░░░██───
@@ -33,7 +33,7 @@ public class Ui {
      * Prints a horizontal separator line.
      */
     public static void printHorizontalLine() {
-        System.out.print(line);
+        System.out.print(LINE);
     }
 
     /**

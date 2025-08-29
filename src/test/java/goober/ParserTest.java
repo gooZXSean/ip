@@ -82,7 +82,7 @@ public class ParserTest {
     class FormatterFromListTests {
         @Test
         void supports_multiple_optional_patterns() {
-            var fmt = Parser.dTFormatterFromList(List.of("yyyy/MM/dd HHmm", "dd-MM-yyyy HHmm"));
+            var fmt = Parser.buildDateTimeFormatterFromPatterns(List.of("yyyy/MM/dd HHmm", "dd-MM-yyyy HHmm"));
             LocalDateTime a = LocalDateTime.parse("2025/09/01 1800", fmt);
             LocalDateTime b = LocalDateTime.parse("01-09-2025 1800", fmt);
             assertEquals(LocalDateTime.of(2025, 9, 1, 18, 0), a);
