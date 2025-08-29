@@ -237,7 +237,7 @@ public class Goober {
         String query = Parser.getFlagArg(line, flag);
         List<Task> searchResult = saveData.searchTask(query);
 
-        String msg = "Here are the matching tasks in your list:\n";
+        String msg = "Here are the matching tasks in your list:";
         Ui.printListInSection(searchResult, msg);
     }
 
