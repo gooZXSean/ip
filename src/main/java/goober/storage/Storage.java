@@ -7,7 +7,16 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+/**
+ * File-based persistence utilities for {@link SaveData}.
+ */
 public class Storage {
+    /**
+     * Loads save data from a file if it exists and is non-empty; otherwise creates a new save file and returns an empty save.
+     *
+     * @param filename path to the save file
+     * @return loaded or newly created {@link SaveData}
+     */
     public static SaveData getOrCreateSave(String filename) {
         File file = new File(filename);
 
@@ -37,6 +46,12 @@ public class Storage {
         return newSave;
     }
 
+    /**
+     * Writes the given save data to the specified file (overwriting if it exists).
+     *
+     * @param saveData save data to write
+     * @param filename path to the save file
+     */
     public static void saveToFile(SaveData saveData, String filename) {
         try (FileOutputStream fos = new FileOutputStream(filename);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
