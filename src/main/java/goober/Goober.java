@@ -12,7 +12,7 @@ import java.time.format.DateTimeParseException;
 
 public class Goober {
     private static SaveData saveData;
-    private static final String saveFileName = "GooberTasks.ser";
+    private static final String SAVE_FILE_NAME = "GooberTasks.ser";
 
     public static void main(String[] args) {
         startUp();
@@ -22,7 +22,7 @@ public class Goober {
     }
 
     private static void startUp() {
-        saveData = Storage.getOrCreateSave(saveFileName);
+        saveData = Storage.getOrCreateSave(SAVE_FILE_NAME);
     }
 
     private static void greet() {
@@ -219,7 +219,7 @@ public class Goober {
     }
 
     private static void updateSaveData() {
-        Storage.saveToFile(saveData, saveFileName);
+        Storage.saveToFile(saveData, SAVE_FILE_NAME);
     }
 
     private static void exit() {
