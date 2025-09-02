@@ -77,7 +77,7 @@ public class ParserTest {
     }
 
     @Nested
-    @DisplayName("dTFormatterFromList()")
+    @DisplayName("buildDateTimeFormatterFromPatterns()")
     class FormatterFromListTests {
         @Test
         void buildDateTimeFormatterFromPatterns_multipleOptionalPatterns_parsesBoth() {
