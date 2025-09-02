@@ -1,10 +1,10 @@
 package goober.storage;
 
-import goober.task.Task;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import goober.task.Task;
 
 /**
  * Serializable container for persistent data.
@@ -21,6 +21,11 @@ public class SaveData implements Serializable {
         return taskList;
     }
 
+    /**
+     * Returns tasks that contain query in their description.
+     * @param query
+     * @return
+     */
     public List<Task> searchTask(String query) {
         List<Task> output = new ArrayList<>();
         for (Task t : taskList) {

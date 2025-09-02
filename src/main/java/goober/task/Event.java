@@ -1,13 +1,23 @@
 package goober.task;
 
-import goober.Parser;
-
 import java.time.LocalDateTime;
 
-public class Event extends Task {
-    private LocalDateTime from;
-    private LocalDateTime to;
+import goober.Parser;
 
+/**
+ * Represents a task scheduled over a start and end date/time.
+ */
+public class Event extends Task {
+    private final LocalDateTime from;
+    private final LocalDateTime to;
+
+    /**
+     * Constructs a new Event.
+     *
+     * @param description the description
+     * @param from        the from
+     * @param to          the to
+     */
     public Event(String description, LocalDateTime from, LocalDateTime to) {
         super(description);
         this.from = from;
@@ -16,8 +26,7 @@ public class Event extends Task {
 
     @Override
     public String toString() {
-        return "[E]" + super.toString()
-                + " (from: " + Parser.dateTimeToString(from)
-                + " to: " + Parser.dateTimeToString(to) + ")";
+        return "[E]" + super.toString() + " (from: " + Parser.dateTimeToString(from) + " to: "
+                + Parser.dateTimeToString(to) + ")";
     }
 }

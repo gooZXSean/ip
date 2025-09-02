@@ -12,7 +12,8 @@ import java.io.ObjectOutputStream;
  */
 public class Storage {
     /**
-     * Loads save data from a file if it exists and is non-empty; otherwise creates a new save file and returns an empty save.
+     * Loads save data from a file if it exists and is non-empty; otherwise creates a new save file and returns an empty
+     * save.
      *
      * @param filename path to the save file
      * @return loaded or newly created {@link SaveData}
@@ -21,8 +22,7 @@ public class Storage {
         File file = new File(filename);
 
         if (file.exists() && file.length() > 0) {
-            try (FileInputStream fis = new FileInputStream(file);
-                 ObjectInputStream ois = new ObjectInputStream(fis)) {
+            try (FileInputStream fis = new FileInputStream(file); ObjectInputStream ois = new ObjectInputStream(fis)) {
 
                 Object obj = ois.readObject();
                 if (obj instanceof SaveData) {
@@ -37,8 +37,7 @@ public class Storage {
         }
 
         SaveData newSave = new SaveData();
-        try (FileOutputStream fos = new FileOutputStream(file);
-             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+        try (FileOutputStream fos = new FileOutputStream(file); ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(newSave);
         } catch (IOException e) {
             System.out.println("Error writing new TaskList to file: " + e.getMessage());

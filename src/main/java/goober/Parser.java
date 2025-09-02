@@ -22,9 +22,9 @@ public class Parser {
      * @return a DateTimeFormatter supporting all patterns in the list
      */
     public static DateTimeFormatter buildDateTimeFormatterFromPatterns(List<String> list) {
-        DateTimeFormatterBuilder dTFBuilder = new DateTimeFormatterBuilder();
-        list.forEach(str -> dTFBuilder.appendOptional(DateTimeFormatter.ofPattern(str)));
-        return dTFBuilder.toFormatter();
+        DateTimeFormatterBuilder dateTimeFormatterBuilder = new DateTimeFormatterBuilder();
+        list.forEach(str -> dateTimeFormatterBuilder.appendOptional(DateTimeFormatter.ofPattern(str)));
+        return dateTimeFormatterBuilder.toFormatter();
     }
 
     /**

@@ -2,10 +2,18 @@ package goober.task;
 
 import java.io.Serializable;
 
+/**
+ * Represents a generic task with a description and completion status.
+ */
 public class Task implements Serializable {
     private String description = "no name";
     private boolean isCompleted = false;
 
+    /**
+     * Constructs a new Task.
+     *
+     * @param description the description
+     */
     public Task(String description) {
         this.description = description;
     }
@@ -18,6 +26,7 @@ public class Task implements Serializable {
         this.isCompleted = true;
     }
 
+
     public void unmarkComplete() {
         this.isCompleted = false;
     }
@@ -25,7 +34,9 @@ public class Task implements Serializable {
     @Override
     public String toString() {
         char c = ' ';
-        if (isCompleted) c = 'X';
+        if (isCompleted) {
+            c = 'X';
+        }
         return "[" + c + "] " + description;
     }
 }

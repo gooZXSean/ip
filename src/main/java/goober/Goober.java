@@ -1,5 +1,9 @@
 package goober;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
+import java.util.List;
+
 import goober.storage.SaveData;
 import goober.storage.Storage;
 import goober.task.Deadline;
@@ -7,14 +11,18 @@ import goober.task.Event;
 import goober.task.Task;
 import goober.task.Todo;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
-import java.util.List;
-
+/**
+ * Main application entry point for the Goober chatbot.
+ */
 public class Goober {
-    private static SaveData saveData;
     private static final String SAVE_FILE_NAME = "GooberTasks.ser";
+    private static SaveData saveData;
 
+    /**
+     * Program entry point.
+     *
+     * @param args the args
+     */
     public static void main(String[] args) {
         startUp();
         greet();
@@ -147,9 +155,9 @@ public class Goober {
 
     private static void addTask(Task task) {
         saveData.getTaskList().add(task);
-        String msg = "Got it. I've added this task:\n" +
-                task.toString() +
-                "\nNow you have " + saveData.getTaskList().size() + " tasks in the list.";
+        String msg =
+                "Got it. I've added this task:\n" + task.toString() + "\nNow you have " + saveData.getTaskList().size()
+                        + " tasks in the list.";
         updateSaveData();
         Ui.printSection(msg);
     }
@@ -167,9 +175,9 @@ public class Goober {
         try {
             Task task = saveData.getTaskList().get(index - 1);
             saveData.getTaskList().remove(task);
-            String msg = "Noted. I've removed this task:\n" +
-                    task.toString() +
-                    "\nNow you have " + saveData.getTaskList().size() + " tasks in the list.";
+            String msg =
+                    "Noted. I've removed this task:\n" + task.toString() + "\nNow you have " + saveData.getTaskList()
+                            .size() + " tasks in the list.";
             updateSaveData();
             Ui.printSection(msg);
         } catch (IndexOutOfBoundsException e) {
