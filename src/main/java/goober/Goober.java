@@ -68,11 +68,11 @@ public class Goober {
         } catch (IllegalArgumentException e) {
             return e.toString();
         } catch (DateTimeParseException e) {
-            String msg = "Wrong date time format!: " + e + "\nAccepted date formats: ";
+            String msg = "Wrong date time format!\nAccepted date formats: ";
             return Formatter.toNumberList(Parser.FORMAT_LIST, msg);
         } catch (IndexOutOfBoundsException e) {
-            return "Error! Index of task out of bounds!";
-        }
+            return "Index out of bounds!";
+        } 
     }
 
     private String getNumberedTasks() {
@@ -200,7 +200,7 @@ public class Goober {
         List<Task> searchResult = saveData.searchTask(query);
 
         String msg = "Here are the matching tasks in your list:";
-        return Formatter.toNumberList(saveData.getTaskList(), msg);
+        return Formatter.toNumberList(saveData.searchTask(query), msg);
     }
 
     private String exit() {
