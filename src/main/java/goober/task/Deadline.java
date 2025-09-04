@@ -2,7 +2,7 @@ package goober.task;
 
 import java.time.LocalDateTime;
 
-import goober.Parser;
+import goober.helper.Parser;
 
 /**
  * Represents a task with a due date/time.

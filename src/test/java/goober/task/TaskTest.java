@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import goober.Parser;
+import goober.helper.Parser;
 
 public class TaskTest {
 
