@@ -1,4 +1,4 @@
-package goober;
+package goober.helper;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

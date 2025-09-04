@@ -4,107 +4,92 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
+import goober.helper.Formatter;
+import goober.helper.Parser;
 import goober.storage.SaveData;
 import goober.storage.Storage;
 import goober.task.Deadline;
 import goober.task.Event;
 import goober.task.Task;
 import goober.task.Todo;
+import javafx.animation.PauseTransition;
+import javafx.application.Platform;
+import javafx.util.Duration;
 
 /**
- * Main application entry point for the Goober chatbot.
+ * Goober chatbot.
  */
 public class Goober {
     private static final String SAVE_FILE_NAME = "GooberTasks.ser";
-    private static SaveData saveData;
+    private SaveData saveData;
 
     /**
-     * Program entry point.
-     *
-     * @param args the args
+     * Goober constructor. Sets up storage.
      */
-    public static void main(String[] args) {
+    public Goober() {
         startUp();
-        greet();
-        userLoop();
-        exit();
     }
 
-    private static void startUp() {
+    private void startUp() {
         saveData = Storage.getOrCreateSave(SAVE_FILE_NAME);
     }
 
-    private static void greet() {
-        System.out.println(Ui.LOGO);
-        String msg = "Hello, I'm Goober! How may I help you today?";
-        Ui.printSection(msg);
-    }
-
-    private static void userLoop() {
-        java.util.Scanner sc = new java.util.Scanner(System.in);
-        boolean ongoing = true;
-        while (ongoing) {
-            String line = sc.nextLine().trim();
-            String cmd = line.split(" ", 2)[0].toLowerCase();
-            try {
-                switch (cmd) {
-                case "":
-                    break;
-                case "bye":
-                    ongoing = false;
-                    break;
-                case "list":
-                    printTasks();
-                    break;
-                case "mark":
-                    markCompleteTask(line);
-                    break;
-                case "unmark":
-                    unmarkCompleteTask(line);
-                    break;
-                case "todo":
-                    addTodo(line);
-                    break;
-                case "deadline":
-                    addDeadline(line);
-                    break;
-                case "event":
-                    addEvent(line);
-                    break;
-                case "delete":
-                    deleteTask(line);
-                    break;
-                case "find":
-                    find(line);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Sorry, I don't recognise that command! :(");
-                }
-            } catch (IllegalArgumentException e) {
-                Ui.printSection((e.toString()));
+    /**
+     * Generates a response for the user's chat message.
+     */
+    public String getResponse(String input) {
+        String line = input.trim();
+        String cmd = line.split(" ", 2)[0].toLowerCase();
+        try {
+            switch (cmd) {
+            case "hello":
+                return "Hello, I'm Goober! How may I help you?";
+            case "bye":
+                return exit();
+            case "list":
+                return getNumberedTasks();
+            case "mark":
+                return markCompleteTask(line);
+            case "unmark":
+                return unmarkCompleteTask(line);
+            case "todo":
+                return addTodo(line);
+            case "deadline":
+                return addDeadline(line);
+            case "event":
+                return addEvent(line);
+            case "delete":
+                return deleteTask(line);
+            case "find":
+                return find(line);
+            default:
+                return "Sorry, I don't recognise that command! :(";
             }
+        } catch (IllegalArgumentException e) {
+            return e.toString();
+        } catch (DateTimeParseException e) {
+            String msg = "Wrong date time format!: " + e + "\nAccepted date formats: ";
+            return Formatter.toNumberList(Parser.FORMAT_LIST, msg);
+        } catch (IndexOutOfBoundsException e) {
+            return "Error! Index of task out of bounds!";
         }
     }
 
-    private static void printTasks() {
-        if (saveData.getTaskList().isEmpty()) {
-            Ui.printSection("You've got no tasks!");
-        } else {
-            Ui.printListInSection(saveData.getTaskList(), "Here are the tasks in your list:");
-        }
+    private String getNumberedTasks() {
+        return Formatter.toNumberList(saveData.getTaskList());
     }
 
-    private static void addTodo(String line) {
+    private String addTodo(String line) {
         String flag = "todo";
         String description = Parser.getFlagArg(line, flag);
         if (description.isEmpty()) {
             throw new IllegalArgumentException("The description of a todo cannot be empty!");
         }
         Task task = new Todo(description);
-        addTask(task);
+        return addTask(task);
     }
 
-    private static void addDeadline(String line) {
+    private String addDeadline(String line) {
         String flag = "deadline";
         String byFlag = "/by";
         String description = Parser.getFlagArg(line, flag);
@@ -116,17 +101,12 @@ public class Goober {
             throw new IllegalArgumentException("The " + byFlag + " of a deadline cannot be empty!");
         }
 
-        try {
-            LocalDateTime byDate = Parser.parseDateTime(by);
-            Task task = new Deadline(description, byDate);
-            addTask(task);
-        } catch (DateTimeParseException e) {
-            String msg = "Wrong date time format!: " + e + "\nAccepted date formats: ";
-            Ui.printListInSection(Parser.FORMAT_LIST, msg);
-        }
+        LocalDateTime byDate = Parser.parseDateTime(by);
+        Task task = new Deadline(description, byDate);
+        return addTask(task);
     }
 
-    private static void addEvent(String line) {
+    private String addEvent(String line) {
         String flag = "event";
         String fromFlag = "/from";
         String toFlag = "/to";
@@ -142,115 +122,91 @@ public class Goober {
         if (to.isEmpty()) {
             throw new IllegalArgumentException("The " + toFlag + " of a event cannot be empty!");
         }
-        try {
-            LocalDateTime fromDate = Parser.parseDateTime(from);
-            LocalDateTime toDate = Parser.parseDateTime(to);
-            Task task = new Event(description, fromDate, toDate);
-            addTask(task);
-        } catch (DateTimeParseException e) {
-            String msg = "Wrong date time format!: " + e + "/nAccepted date formats: ";
-            Ui.printListInSection(Parser.FORMAT_LIST, msg);
-        }
+        LocalDateTime fromDate = Parser.parseDateTime(from);
+        LocalDateTime toDate = Parser.parseDateTime(to);
+        Task task = new Event(description, fromDate, toDate);
+        return addTask(task);
     }
 
-    private static void addTask(Task task) {
+    private String addTask(Task task) {
         saveData.getTaskList().add(task);
         String msg =
                 "Got it. I've added this task:\n" + task.toString() + "\nNow you have " + saveData.getTaskList().size()
                         + " tasks in the list.";
         updateSaveData();
-        Ui.printSection(msg);
+        return msg;
     }
 
-    private static void deleteTask(String line) {
+    private String deleteTask(String line) {
         String flag = "delete";
         String index = Parser.getFlagArg(line, flag);
         if (index.isEmpty()) {
             throw new IllegalArgumentException("The task number of a delete cannot be empty!");
         }
-        deleteTask(Integer.parseInt(index));
+        return deleteTask(Integer.parseInt(index));
     }
 
-    private static void deleteTask(int index) {
-        try {
-            Task task = saveData.getTaskList().get(index - 1);
-            saveData.getTaskList().remove(task);
-            String msg =
-                    "Noted. I've removed this task:\n" + task.toString() + "\nNow you have " + saveData.getTaskList()
-                            .size() + " tasks in the list.";
-            updateSaveData();
-            Ui.printSection(msg);
-        } catch (IndexOutOfBoundsException e) {
-            String msg = "Error! Index of task out of bounds!";
-            Ui.printSection(msg);
-        }
+    private String deleteTask(int index) {
+
+        Task task = saveData.getTaskList().get(index - 1);
+        saveData.getTaskList().remove(task);
+        updateSaveData();
+        return "Noted. I've removed this task:\n" + task.toString() + "\nNow you have " + saveData.getTaskList().size()
+                + " tasks in the list.";
+
     }
 
-    private static void markCompleteTask(String line) {
+    private String markCompleteTask(String line) {
         String flag = "mark";
         String index = Parser.getFlagArg(line, flag);
         if (index.isEmpty()) {
             throw new IllegalArgumentException("The task number of a mark cannot be empty!");
         }
-        markCompleteTask(Integer.parseInt(index));
+        return markCompleteTask(Integer.parseInt(index));
     }
 
-    private static void markCompleteTask(int index) {
-        try {
-            Task task = saveData.getTaskList().get(index - 1);
-            task.markComplete();
-            String msg = "Nice! I've marked this task as done:\n  " + task;
-            updateSaveData();
-            Ui.printSection(msg);
-        } catch (IndexOutOfBoundsException e) {
-            String msg = "Error! Index of task out of bounds!";
-            Ui.printSection(msg);
-        }
+    private String markCompleteTask(int index) {
+        Task task = saveData.getTaskList().get(index - 1);
+        task.markComplete();
+        updateSaveData();
+        return "Nice! I've marked this task as done:\n  " + task;
     }
 
-    private static void unmarkCompleteTask(String line) {
+    private String unmarkCompleteTask(String line) {
         String flag = "unmark";
         String index = Parser.getFlagArg(line, flag);
         if (index.isEmpty()) {
             throw new IllegalArgumentException("The task number of a unmark cannot be empty!");
         }
-        unmarkCompleteTask(Integer.parseInt(index));
+        return unmarkCompleteTask(Integer.parseInt(index));
     }
 
-    private static void unmarkCompleteTask(int index) {
-        try {
-            Task task = saveData.getTaskList().get(index - 1);
-            task.unmarkComplete();
-            String msg = "OK, I've marked this task as not done yet:\n  " + task;
-            updateSaveData();
-            Ui.printSection(msg);
-        } catch (IndexOutOfBoundsException e) {
-            String msg = "Error! Index of task out of bounds!";
-            Ui.printSection(msg);
-        }
+    private String unmarkCompleteTask(int index) {
+
+        Task task = saveData.getTaskList().get(index - 1);
+        task.unmarkComplete();
+        updateSaveData();
+        return "OK, I've marked this task as not done yet:\n  " + task;
+
     }
 
-    private static void updateSaveData() {
+    private void updateSaveData() {
         Storage.saveToFile(saveData, SAVE_FILE_NAME);
     }
 
-    /**
-     * Finds tasks whose description contains the given keyword (case-insensitive)
-     * and prints them in a numbered list. If none match, prints an empty-state message.
-     *
-     * @param line user input containing the keyword (e.g., "find book")
-     */
-    private static void find(String line) {
+    private String find(String line) {
         String flag = "find";
         String query = Parser.getFlagArg(line, flag);
         List<Task> searchResult = saveData.searchTask(query);
 
         String msg = "Here are the matching tasks in your list:";
-        Ui.printListInSection(searchResult, msg);
+        return Formatter.toNumberList(saveData.getTaskList(), msg);
     }
 
-    private static void exit() {
-        String msg = "Bye! Hope to see you again soon!";
-        Ui.printSection(msg);
+    private String exit() {
+        PauseTransition delay = new PauseTransition(Duration.seconds(1.5));
+        delay.setOnFinished(event -> Platform.exit());
+        delay.play();
+        return "Bye! Hope to see you again soon!";
     }
 }
