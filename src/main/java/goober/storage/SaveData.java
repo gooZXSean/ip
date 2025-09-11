@@ -23,8 +23,8 @@ public class SaveData implements Serializable {
 
     /**
      * Returns tasks that contain query in their description.
-     * @param query
-     * @return
+     * @param query search query
+     * @return search result
      */
     public List<Task> searchTask(String query) {
         List<Task> output = new ArrayList<>();

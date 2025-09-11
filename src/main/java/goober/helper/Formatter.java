@@ -3,7 +3,7 @@ package goober.helper;
 import java.util.List;
 
 /**
- * Formatter to help format Strings.
+ * Utility class to help format Strings.
  */
 public class Formatter {
     /**
