@@ -8,6 +8,7 @@ import java.io.Serializable;
 public class Task implements Serializable {
     private String description = "no name";
     private boolean isCompleted = false;
+    private Priority priority = Priority.NONE;
 
     /**
      * Constructs a new Task.
@@ -27,14 +28,21 @@ public class Task implements Serializable {
         this.isCompleted = true;
     }
 
-
     public void unmarkComplete() {
         this.isCompleted = false;
+    }
+
+    public Priority getPriority() {
+        return (priority == null) ? Priority.NONE : priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
     }
 
     @Override
     public String toString() {
         char c = isCompleted ? 'X' : ' ';
-        return "[" + c + "] " + description;
+        return "[" + c + "](" + getPriority().shortTag() + ") " + description;
     }
 }

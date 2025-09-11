@@ -10,6 +10,7 @@ import goober.storage.SaveData;
 import goober.storage.Storage;
 import goober.task.Deadline;
 import goober.task.Event;
+import goober.task.Priority;
 import goober.task.Task;
 import goober.task.Todo;
 import javafx.animation.PauseTransition;
@@ -21,7 +22,6 @@ import javafx.util.Duration;
  */
 public class Goober {
     private static final String SAVE_FILE_NAME = "GooberTasks.ser";
-    private final float DELAY_BEFORE_CLOSE = 1.5F;
     private SaveData saveData;
 
     /**
@@ -63,6 +63,8 @@ public class Goober {
                 return deleteTask(line);
             case "find":
                 return find(line);
+            case "priority":
+                return setPriority(line);
             default:
                 return "Sorry, I don't recognise that command! :(";
             }
@@ -89,6 +91,7 @@ public class Goober {
         }
 
         Task task = new Todo(description);
+        task.setPriority(Priority.of(Parser.getFlagArg(line, "/p")));
         return addTask(task);
     }
 
@@ -107,6 +110,7 @@ public class Goober {
 
         LocalDateTime byDate = Parser.parseDateTime(by);
         Task task = new Deadline(description, byDate);
+        task.setPriority(Priority.of(Parser.getFlagArg(line, "/p")));
         return addTask(task);
     }
 
@@ -131,6 +135,7 @@ public class Goober {
         LocalDateTime fromDate = Parser.parseDateTime(from);
         LocalDateTime toDate = Parser.parseDateTime(to);
         Task task = new Event(description, fromDate, toDate);
+        task.setPriority(Priority.of(Parser.getFlagArg(line, "/p")));
         return addTask(task);
     }
 
@@ -207,8 +212,30 @@ public class Goober {
         return Formatter.toNumberList(searchResult, msg);
     }
 
+    private String setPriority(String line) {
+        String flag = "priority";
+        String priorityFlag = "/p";
+        String index = Parser.getFlagArg(line, flag);
+        String priorityStr = Parser.getFlagArg(line, priorityFlag);
+
+        if (index.isEmpty()) {
+            throw new IllegalArgumentException("The task number of a prioritise cannot be empty!");
+        }
+
+        Priority priority = Priority.of(priorityStr);
+        return setPriority(Integer.parseInt(index), priority);
+    }
+
+    private String setPriority(int index, Priority priority) {
+        Task task = saveData.getTaskList().get(index - 1);
+        task.setPriority(priority);
+        updateSaveData();
+        return "OK, I've updated the priority of this task:\n  " + task;
+    }
+
     private String exit() {
-        PauseTransition delay = new PauseTransition(Duration.seconds(DELAY_BEFORE_CLOSE));
+        float delayTime = 1.5F;
+        PauseTransition delay = new PauseTransition(Duration.seconds(delayTime));
         delay.setOnFinished(event -> Platform.exit());
         delay.play();
         return "Bye! Hope to see you again soon!";

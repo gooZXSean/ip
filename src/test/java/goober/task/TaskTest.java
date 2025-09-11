@@ -19,15 +19,15 @@ public class TaskTest {
         Todo t = new Todo("read book");
 
         // default: undone
-        assertEquals("[T][ ] read book", t.toString(), "Initial Todo format should be [T][ ] description");
+        assertEquals("[T][ ]( ) read book", t.toString(), "Initial Todo format should be [T][ ] description");
 
         // mark done
         t.markComplete();
-        assertEquals("[T][X] read book", t.toString(), "After markComplete, Todo should show [X]");
+        assertEquals("[T][X]( ) read book", t.toString(), "After markComplete, Todo should show [X]");
 
         // unmark
         t.unmarkComplete();
-        assertEquals("[T][ ] read book", t.toString(), "After unmarkComplete, Todo should show [ ] again");
+        assertEquals("[T][ ]( ) read book", t.toString(), "After unmarkComplete, Todo should show [ ] again");
     }
 
     @Test
@@ -43,11 +43,11 @@ public class TaskTest {
         LocalDateTime by = LocalDateTime.of(2025, 9, 1, 18, 0);
         Deadline d = new Deadline("return book", by);
 
-        String expectedUndone = "[D][ ] return book (by: " + Parser.dateTimeToString(by) + ")";
+        String expectedUndone = "[D][ ]( ) return book (by: " + Parser.dateTimeToString(by) + ")";
         assertEquals(expectedUndone, d.toString(), "Deadline undone format must match exactly");
 
         d.markComplete();
-        String expectedDone = "[D][X] return book (by: " + Parser.dateTimeToString(by) + ")";
+        String expectedDone = "[D][X]( ) return book (by: " + Parser.dateTimeToString(by) + ")";
         assertEquals(expectedDone, d.toString(), "Deadline done format must match exactly");
     }
 
@@ -59,14 +59,14 @@ public class TaskTest {
         Event e = new Event("CS2103T lecture", from, to);
 
         String expectedUndone =
-                "[E][ ] CS2103T lecture (from: " + Parser.dateTimeToString(from) + " to: " + Parser.dateTimeToString(to)
-                        + ")";
+                "[E][ ]( ) CS2103T lecture (from: " + Parser.dateTimeToString(from) + " to: " + Parser.dateTimeToString(
+                        to) + ")";
         assertEquals(expectedUndone, e.toString(), "Event undone format must match exactly");
 
         e.markComplete();
         String expectedDone =
-                "[E][X] CS2103T lecture (from: " + Parser.dateTimeToString(from) + " to: " + Parser.dateTimeToString(to)
-                        + ")";
+                "[E][X]( ) CS2103T lecture (from: " + Parser.dateTimeToString(from) + " to: " + Parser.dateTimeToString(
+                        to) + ")";
         assertEquals(expectedDone, e.toString(), "Event done format must match exactly");
     }
 }
