@@ -33,10 +33,7 @@ public class Task implements Serializable {
 
     @Override
     public String toString() {
-        char c = ' ';
-        if (isCompleted) {
-            c = 'X';
-        }
+        char c = isCompleted ? 'X' : ' ';
         return "[" + c + "] " + description;
     }
 }

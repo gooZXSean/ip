@@ -72,7 +72,7 @@ public class Goober {
             return Formatter.toNumberList(Parser.FORMAT_LIST, msg);
         } catch (IndexOutOfBoundsException e) {
             return "Index out of bounds!";
-        } 
+        }
     }
 
     private String getNumberedTasks() {
@@ -82,9 +82,11 @@ public class Goober {
     private String addTodo(String line) {
         String flag = "todo";
         String description = Parser.getFlagArg(line, flag);
+
         if (description.isEmpty()) {
             throw new IllegalArgumentException("The description of a todo cannot be empty!");
         }
+
         Task task = new Todo(description);
         return addTask(task);
     }
@@ -94,6 +96,7 @@ public class Goober {
         String byFlag = "/by";
         String description = Parser.getFlagArg(line, flag);
         String by = Parser.getFlagArg(line, byFlag);
+
         if (description.isEmpty()) {
             throw new IllegalArgumentException("The description of a deadline cannot be empty!");
         }
@@ -113,6 +116,7 @@ public class Goober {
         String description = Parser.getFlagArg(line, flag);
         String from = Parser.getFlagArg(line, fromFlag);
         String to = Parser.getFlagArg(line, toFlag);
+
         if (description.isEmpty()) {
             throw new IllegalArgumentException("The description of an event cannot be empty!");
         }
@@ -122,6 +126,7 @@ public class Goober {
         if (to.isEmpty()) {
             throw new IllegalArgumentException("The " + toFlag + " of a event cannot be empty!");
         }
+
         LocalDateTime fromDate = Parser.parseDateTime(from);
         LocalDateTime toDate = Parser.parseDateTime(to);
         Task task = new Event(description, fromDate, toDate);
@@ -130,9 +135,9 @@ public class Goober {
 
     private String addTask(Task task) {
         saveData.getTaskList().add(task);
-        String msg =
-                "Got it. I've added this task:\n" + task.toString() + "\nNow you have " + saveData.getTaskList().size()
-                        + " tasks in the list.";
+        String msg = String.format(
+                "Got it. I've added this task:\n%s\nNow you have %s tasks in the list.",
+                task.toString(), saveData.getTaskList().size());
         updateSaveData();
         return msg;
     }
@@ -147,13 +152,13 @@ public class Goober {
     }
 
     private String deleteTask(int index) {
-
         Task task = saveData.getTaskList().get(index - 1);
         saveData.getTaskList().remove(task);
+        String msg = String.format(
+                "Noted. I've removed this task:\n%s\nNow you have %s tasks in the list.",
+                task.toString(), saveData.getTaskList().size());
         updateSaveData();
-        return "Noted. I've removed this task:\n" + task.toString() + "\nNow you have " + saveData.getTaskList().size()
-                + " tasks in the list.";
-
+        return msg;
     }
 
     private String markCompleteTask(String line) {
@@ -182,12 +187,10 @@ public class Goober {
     }
 
     private String unmarkCompleteTask(int index) {
-
         Task task = saveData.getTaskList().get(index - 1);
         task.unmarkComplete();
         updateSaveData();
         return "OK, I've marked this task as not done yet:\n  " + task;
-
     }
 
     private void updateSaveData() {
@@ -200,7 +203,7 @@ public class Goober {
         List<Task> searchResult = saveData.searchTask(query);
 
         String msg = "Here are the matching tasks in your list:";
-        return Formatter.toNumberList(saveData.searchTask(query), msg);
+        return Formatter.toNumberList(searchResult, msg);
     }
 
     private String exit() {
