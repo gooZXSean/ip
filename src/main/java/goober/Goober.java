@@ -21,6 +21,7 @@ import javafx.util.Duration;
  */
 public class Goober {
     private static final String SAVE_FILE_NAME = "GooberTasks.ser";
+    private final float DELAY_BEFORE_CLOSE = 1.5F;
     private SaveData saveData;
 
     /**
@@ -207,7 +208,7 @@ public class Goober {
     }
 
     private String exit() {
-        PauseTransition delay = new PauseTransition(Duration.seconds(1.5));
+        PauseTransition delay = new PauseTransition(Duration.seconds(DELAY_BEFORE_CLOSE));
         delay.setOnFinished(event -> Platform.exit());
         delay.play();
         return "Bye! Hope to see you again soon!";
