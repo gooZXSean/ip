@@ -15,6 +15,7 @@ public class Task implements Serializable {
      * @param description the description
      */
     public Task(String description) {
+        assert description != null : "Task description must not be null";
         this.description = description;
     }
 

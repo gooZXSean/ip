@@ -72,7 +72,7 @@ public class Goober {
             return Formatter.toNumberList(Parser.FORMAT_LIST, msg);
         } catch (IndexOutOfBoundsException e) {
             return "Index out of bounds!";
-        } 
+        }
     }
 
     private String getNumberedTasks() {

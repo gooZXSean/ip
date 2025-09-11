@@ -35,6 +35,7 @@ public class Parser {
      * @return the argument string after the flag, or an empty string if not found
      */
     public static String getFlagArg(String line, String flag) {
+        assert flag != null : "Parser:getFlagArg: flag cannot be null";
         if (line.contains(flag)) {
             return line.split(flag, 2)[1].split("/", 2)[0].trim();
         } else {
