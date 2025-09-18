@@ -9,13 +9,15 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 /**
  * Controller for the main GUI.
  */
-public class MainWindow extends AnchorPane {
+public class MainWindow extends BorderPane {
     private final Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
     private final Image gooberImage = new Image(this.getClass().getResourceAsStream("/images/DaDuke.png"));
     @FXML
@@ -28,15 +30,15 @@ public class MainWindow extends AnchorPane {
     private Button sendButton;
     private Goober goober;
     @FXML
-    private AnchorPane root;
+    private BorderPane root;
     @FXML
     private ToggleButton themeToggle;
-
 
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
         sendButton.disableProperty().bind(userInput.textProperty().isEmpty());
+        HBox.setHgrow(userInput, Priority.ALWAYS);
 
         userInput.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
             if (e.getCode() == KeyCode.ENTER && !e.isShiftDown()) {
