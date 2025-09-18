@@ -19,7 +19,7 @@ import javafx.scene.layout.VBox;
  */
 public class MainWindow extends BorderPane {
     private final Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
-    private final Image gooberImage = new Image(this.getClass().getResourceAsStream("/images/DaDuke.png"));
+    private final Image gooberImage = new Image(this.getClass().getResourceAsStream("/images/DaGoober.png"));
     @FXML
     private ScrollPane scrollPane;
     @FXML
@@ -34,6 +34,10 @@ public class MainWindow extends BorderPane {
     @FXML
     private ToggleButton themeToggle;
 
+
+    /**
+     * Initializes the main window.
+     */
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
@@ -96,7 +100,9 @@ public class MainWindow extends BorderPane {
         // remove any old bg-* classes
         root.getStyleClass().removeIf(s -> s.startsWith("bg-"));
         if (cls != null && !cls.isBlank()) {
-            if (!root.getStyleClass().contains(cls)) root.getStyleClass().add(cls);
+            if (!root.getStyleClass().contains(cls)) {
+                root.getStyleClass().add(cls);
+            }
         }
     }
 }
