@@ -22,7 +22,16 @@ public class Main extends Application {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
+
+            // Apply CSS
+            scene.getStylesheets().add(Main.class.getResource("/view/styles.css").toExternalForm());
+
+            stage.setTitle("Goober");
             stage.setScene(scene);
+            stage.setMinWidth(420);
+            stage.setMinHeight(520);
+            stage.setResizable(true);
+
             fxmlLoader.<MainWindow>getController().setGoober(goober);
             stage.show();
         } catch (IOException e) {

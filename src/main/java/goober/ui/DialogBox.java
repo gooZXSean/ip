@@ -36,6 +36,7 @@ public class DialogBox extends HBox {
 
         dialog.setText(text);
         displayPicture.setImage(img);
+        dialog.getStyleClass().add("dialog-bubble");
     }
 
     /**
@@ -49,12 +50,16 @@ public class DialogBox extends HBox {
     }
 
     public static DialogBox getUserDialog(String text, Image img) {
-        return new DialogBox(text, img);
+        var db = new DialogBox(text, img);
+        db.dialog.getStyleClass().add("bubble-user");
+        return db;
     }
 
     public static DialogBox getGooberDialog(String text, Image img) {
         var db = new DialogBox(text, img);
+        db.dialog.getStyleClass().add("bubble-bot");
         db.flip();
         return db;
     }
+
 }

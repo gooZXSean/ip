@@ -5,7 +5,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
@@ -24,10 +27,37 @@ public class MainWindow extends AnchorPane {
     @FXML
     private Button sendButton;
     private Goober goober;
+    @FXML
+    private AnchorPane root;
+    @FXML
+    private ToggleButton themeToggle;
+
 
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        sendButton.disableProperty().bind(userInput.textProperty().isEmpty());
+
+        userInput.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+            if (e.getCode() == KeyCode.ENTER && !e.isShiftDown()) {
+                e.consume();
+                handleUserInput();
+            }
+        });
+
+        themeToggle.selectedProperty().addListener((obs, was, is) -> {
+            if (is) {
+                if (!root.getStyleClass().contains("light")) {
+                    root.getStyleClass().add("light");
+                }
+                themeToggle.setText("Dark");
+            } else {
+                root.getStyleClass().remove("light");
+                themeToggle.setText("Light");
+            }
+        });
+
+        setBackgroundClass("bg-photo");
     }
 
     /**
@@ -45,10 +75,26 @@ public class MainWindow extends AnchorPane {
      */
     @FXML
     private void handleUserInput() {
-        String input = userInput.getText();
+        String input = userInput.getText().strip();
+        if (input.isEmpty()) {
+            return;
+        }
         String response = goober.getResponse(input);
         dialogContainer.getChildren()
                 .addAll(DialogBox.getUserDialog(input, userImage), DialogBox.getGooberDialog(response, gooberImage));
         userInput.clear();
+    }
+
+    @FXML
+    private void handleClear() {
+        dialogContainer.getChildren().clear();
+    }
+
+    private void setBackgroundClass(String cls) {
+        // remove any old bg-* classes
+        root.getStyleClass().removeIf(s -> s.startsWith("bg-"));
+        if (cls != null && !cls.isBlank()) {
+            if (!root.getStyleClass().contains(cls)) root.getStyleClass().add(cls);
+        }
     }
 }
