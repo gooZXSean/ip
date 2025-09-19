@@ -76,16 +76,3 @@ Here’s the minimal set most users need. Every command returns a confirmation m
 - `HHMM YYYYY-MM-DD` is also accepted.
 
 ---
-
-## 🧭 Examples (Copy & Try)
-
-```text
-todo read CS2103T user guide
-deadline submit iP /by 2025-09-19 2359
-event team sync /from 2025-09-24 1000 /to 2025-09-24 1200
-list
-mark 1
-find iP
-delete 2
-bye
-priority 1 /p HIGH
