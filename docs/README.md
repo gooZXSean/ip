@@ -68,7 +68,6 @@ Here’s the minimal set most users need. Every command returns a confirmation m
 | **Delete**        | `delete INDEX`                                                | `delete 3`                                                        |
 | **Find**          | `find KEYWORD`                                                | `find CS2103T`                                                    |
 | **Set Priority**  | `priority INDEX /p LEVEL` *(LEVEL: HIGH, MEDIUM, LOW, NONE)*  | `priority 2 /p HIGH`                                              |
-| **Help**          | `help`                                                        | `help`                                                            |
 | **Exit**          | `bye`                                                         | `bye`                                                             |
 
 > **INDEX** is the number shown by `list` (starting at 1).
