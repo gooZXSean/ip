@@ -16,6 +16,7 @@ import javafx.scene.layout.VBox;
 
 /**
  * Controller for the main GUI.
+ * ChatGPT used to add light and dark mode, and generate the background images.
  */
 public class MainWindow extends BorderPane {
     private final Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
