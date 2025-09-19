@@ -3,6 +3,8 @@
 > A friendly, fast, keyboard-first task assistant with a clean JavaFX UI.  
 > Keep your tasks in plain text, search them instantly, and stay in flow.
 
+![alt text](Ui.png "Ui.png")
+
 ---
 
 ## ✅ Quick Start
