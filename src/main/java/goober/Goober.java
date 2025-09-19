@@ -79,7 +79,11 @@ public class Goober {
     }
 
     private String getNumberedTasks() {
-        return Formatter.toNumberList(saveData.getTaskList());
+        List<Task> tasks = saveData.getTaskList();
+        if (tasks.isEmpty()) {
+            return "You've got no tasks!";
+        }
+        return Formatter.toNumberList(tasks, "Here are your tasks:");
     }
 
     private String addTodo(String line) {
