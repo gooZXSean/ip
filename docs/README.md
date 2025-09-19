@@ -65,6 +65,7 @@ Here’s the minimal set most users need. Every command returns a confirmation m
 | **Unmark**        | `unmark INDEX`                                                | `unmark 2`                                                        |
 | **Delete**        | `delete INDEX`                                                | `delete 3`                                                        |
 | **Find**          | `find KEYWORD`                                                | `find CS2103T`                                                    |
+| **Set Priority**  | `priority INDEX /p LEVEL` *(LEVEL: HIGH, MEDIUM, LOW, NONE)*  | `priority 2 /p HIGH`                                              |
 | **Help**          | `help`                                                        | `help`                                                            |
 | **Exit**          | `bye`                                                         | `bye`                                                             |
 
@@ -87,3 +88,4 @@ mark 1
 find iP
 delete 2
 bye
+priority 1 /p HIGH
